@@ -8,6 +8,13 @@ import ProfilePage from "./pages/ProfilePage";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
+// The createContext() method returns both the Provider & Consumer.
+// Provider (*provides the data to child components).
+// Consumer (*consumes the data from within the child components).
+// We'll store this statement within a variable called "UserContext".
+// Since we'll be using "UserContext" in multiple places within the application, export it using the "export" keyword.
+export const UserContext = React.createContext();
+
 class App extends React.Component {
   state = {
     user: null
@@ -55,21 +62,23 @@ class App extends React.Component {
     return !user ? (
       <Authenticator theme={theme} />
     ) : (
-      <Router>
-        <React.Fragment>
-          {/* Navigation */}
-          <Navbar user={user} handleSignOut={this.handleSignOut} />
+      <UserContext.Provider value={{ user }}>
+        <Router>
+          <React.Fragment>
+            {/* Navigation */}
+            <Navbar user={user} handleSignOut={this.handleSignOut} />
 
-          {/* Routes */}
-          <div className="app-container">
-            <Route exact path="/" component={HomePage} />
-            <Route path="/profile" component={ProfilePage} />
-            <Route path="/markets/:marketId" component={
-              ({ match }) => <MarketPage marketId={match.params.marketId} />
-            } />
-          </div>
-        </React.Fragment>
-      </Router>
+            {/* Routes */}
+            <div className="app-container">
+              <Route exact path="/" component={HomePage} />
+              <Route path="/profile" component={ProfilePage} />
+              <Route path="/markets/:marketId" component={
+                ({ match }) => <MarketPage marketId={match.params.marketId} />
+              } />
+            </div>
+          </React.Fragment>
+        </Router>
+      </UserContext.Provider>
     );
   }
 }
