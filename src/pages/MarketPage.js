@@ -70,7 +70,7 @@ class MarketPage extends React.Component {
               }
               name={"1"}
             >
-              <NewProduct />
+              <NewProduct marketId={this.props.marketId} />
             </Tabs.Pane>
           )}
 
@@ -83,7 +83,11 @@ class MarketPage extends React.Component {
               </React.Fragment>
             }
           >
-            {/*  */}
+            {/*<div className="product-list">*/}
+            {/*  {market.products.items.map(product => (*/}
+            {/*    <Product product={product} />*/}
+            {/*  ))}*/}
+            {/*</div>*/}
           </Tabs.Pane>
         </Tabs>
       </React.Fragment>
