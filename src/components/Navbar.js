@@ -1,6 +1,7 @@
 import React from "react";
 import { Menu as Nav, Icon, Button } from "element-react";
 import { NavLink } from "react-router-dom";
+import { ReactComponent as CalculatorIcon } from "../img/calculator.svg";
 
 // We destructured "user" and "handleSignOut" from props passed in via within Router component in App.js
 const Navbar = ({ user, handleSignOut }) => (
@@ -10,7 +11,8 @@ const Navbar = ({ user, handleSignOut }) => (
       <Nav.Item index={"1"}>
         <NavLink to={"/"} className={"nav-link"}>
           <span className="app-title">
-            <img src="https://icon.now.sh/account_balance/f90" alt="App Icon" className={"app-icon"}/>
+            {/*<img src="https://icon.now.sh/account_balance/f90" alt="App Icon" className={"app-icon"}/>*/}
+            <CalculatorIcon />
             AmplifyAgora
           </span>
         </NavLink>
