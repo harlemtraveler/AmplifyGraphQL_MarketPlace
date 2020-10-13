@@ -1,13 +1,38 @@
 import React from "react";
 import { graphqlOperation } from "aws-amplify";
 import { Connect } from "aws-amplify-react";
-import { listMarkets } from "../graphql/queries";
+// import { listMarkets } from "../graphql/queries";
 import { onCreateMarket } from "../graphql/subscriptions";
 import { Loading, Card, Icon, Tag } from "element-react";
 import { ReactComponent as CartIcon } from "../img/shopping_cart.svg";
 import { ReactComponent as StorefrontIcon } from "../img/store_front.svg";
 import { Link } from "react-router-dom";
 import Error from "./Error";
+
+const listMarkets = /* GraphQL */ `
+  query ListMarkets(
+    $filter: ModelMarketFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMarkets(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        products {
+          items {
+            id
+          }
+        }
+        tags
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
 
 const MarketList = ({ searchResults }) => {
   const onNewMarket = (prevQuery, newData) => {
@@ -64,9 +89,7 @@ const MarketList = ({ searchResults }) => {
                         {market.name}
                       </Link>
                       <span style={{ color: "var(--darkAmazonOrange" }}>
-                        {/*{market.products.items.length}*/}
-                        {/* The code used in the course (*on the line above) doesn't work */}
-                        {market.products.items > 0 ? market.products.items.length : 0}
+                        {market.products.items.length}
                       </span>
                       {/*<img src={"../img/shopping_cart.svg"} alt={"Shopping Cart"} />*/}
                       <CartIcon style={{ color: "var(--darkAmazonOrange"}} />
