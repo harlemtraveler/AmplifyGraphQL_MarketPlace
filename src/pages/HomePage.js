@@ -26,7 +26,7 @@ class HomePage extends React.Component {
             { owner: { match: this.state.searchTerm } },
             { tags: { match: this.state.searchTerm } }
           ]
-        },
+        }
         // sort: {
         //   field: "createdAt",
         //   direction: "desc"
@@ -37,8 +37,7 @@ class HomePage extends React.Component {
         searchResults: result.data.searchMarkets.items,
         isSearching: false
       });
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err);
     }
   };

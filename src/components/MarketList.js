@@ -2,7 +2,7 @@ import React from "react";
 import { graphqlOperation } from "aws-amplify";
 import { Connect } from "aws-amplify-react";
 // import { listMarkets } from "../graphql/queries";
-import { onCreateMarket } from "../graphql/subscriptions";
+// import { onCreateMarket } from "../graphql/subscriptions";
 import { Loading, Card, Icon, Tag } from "element-react";
 import { ReactComponent as CartIcon } from "../img/shopping_cart.svg";
 import { ReactComponent as StorefrontIcon } from "../img/store_front.svg";
@@ -22,7 +22,17 @@ const listMarkets = /* GraphQL */ `
         products {
           items {
             id
+            description
+            price
+            shipped
+            owner
+            file {
+              key
+            }
+            createdAt
+            updatedAt
           }
+          nextToken
         }
         tags
         owner
@@ -40,16 +50,16 @@ const MarketList = ({ searchResults }) => {
     const updatedMarketList = [
       newData.onCreateMarket,
       ...prevQuery.listMarkets.items
-    ]
+    ];
     updatedQuery.listMarkets.items = updatedMarketList;
     return updatedQuery;
-  }
+  };
 
   return (
     <Connect
       query={graphqlOperation(listMarkets)}
-      subscription={graphqlOperation(onCreateMarket)}
-      onSubscriptionMsg={onNewMarket}
+      // subscription={graphqlOperation(onCreateMarket)}
+      // onSubscriptionMsg={onNewMarket}
     >
       {({ data, loading, errors }) => {
         if (errors.length > 0) return <Error errors={errors} />;
@@ -92,9 +102,9 @@ const MarketList = ({ searchResults }) => {
                         {market.products.items.length}
                       </span>
                       {/*<img src={"../img/shopping_cart.svg"} alt={"Shopping Cart"} />*/}
-                      <CartIcon style={{ color: "var(--darkAmazonOrange"}} />
+                      <CartIcon style={{ color: "var(--darkAmazonOrange)"}} />
                     </span>
-                    <div style={{ color: "var(--lightSquidInk" }}>
+                    <div style={{ color: "var(--lightSquidInk)" }}>
                       {market.owner}
                     </div>
                   </div>

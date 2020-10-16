@@ -1,5 +1,6 @@
 import React from "react";
-import { Auth, Hub } from "aws-amplify"; // "Hub" allows us to Dispatch & Listen to events
+import {API, Auth, graphqlOperation, Hub} from "aws-amplify"; // "Hub" allows us to Dispatch & Listen to events
+import { registerUser } from "./graphql/mutations";
 import { Authenticator, AmplifyTheme } from "aws-amplify-react";
 import { BrowserRouter as Router, Route} from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -7,8 +8,9 @@ import MarketPage from "./pages/MarketPage";
 import ProfilePage from "./pages/ProfilePage";
 import Navbar from "./components/Navbar";
 import "./App.css";
+import {getUser} from "./graphql/queries";
 
-// The createContext() method returns both the Provider & Consumer.
+// The createContext() method returns both the Provider & Consumer. registerUser
 // Provider (*provides the data to child components).
 // Consumer (*consumes the data from within the child components).
 // We'll store this statement within a variable called "UserContext".
@@ -32,10 +34,11 @@ class App extends React.Component {
   };
 
   onHubCapsule = capsule => {
-    switch(capsule.payload.event) {
+    switch (capsule.payload.event) {
       case "signIn":
         console.log("signed in");
         this.getUserData();
+        this.registerNewUser(capsule.payload.data);
         break;
       case "signUp":
         console.log("signed up");
@@ -49,10 +52,35 @@ class App extends React.Component {
     }
   };
 
-  handleSignOut = async () => {
+  registerNewUser = async signInData => {
+    const getUserInput = {
+      id: signInData.signInUserSession.idToken.payload.sub
+    };
+    const { data } = await API.graphql(graphqlOperation(getUser, getUserInput));
+    // if we can't get a user (meaning the user hasn't been registered before), then we execute registerUser
+    if (!data.getUser) {
+      try {
+        const registerUserInput = {
+          ...getUserInput,
+          username: signInData.username,
+          email: signInData.signInUserSession.idToken.payload.email,
+          registered: true
+        };
+        const newUser = await API.graphql(
+          graphqlOperation(registerUser, { input: registerUserInput })
+        );
+        console.log({ newUser });
+      } catch (err) {
+        console.error("Error registering new user", err);
+      }
+    }
+  };
+
+
+  handleSignout = async () => {
     try {
       await Auth.signOut();
-    } catch(err) {
+    } catch (err) {
       console.error("Error signing out user", err);
     }
   };
@@ -66,12 +94,12 @@ class App extends React.Component {
         <Router>
           <React.Fragment>
             {/* Navigation */}
-            <Navbar user={user} handleSignOut={this.handleSignOut} />
+            <Navbar user={user} handleSignout={this.handleSignout} />
 
             {/* Routes */}
             <div className="app-container">
               <Route exact path="/" component={HomePage} />
-              <Route path="/profile" component={ProfilePage} />
+              <Route path="/profile" component={ProfilePage} user={user} />
               <Route
                 path="/markets/:marketId"
                 component={({ match }) => (

@@ -102,7 +102,7 @@ class MarketPage extends React.Component {
     };
     const result = await API.graphql(graphqlOperation(getMarket, input));
     this.setState({ market: result.data.getMarket, isLoading: false }, () => {
-      this.checkMarketOwner()
+      this.checkMarketOwner();
     });
   };
 
@@ -130,7 +130,7 @@ class MarketPage extends React.Component {
           <h2 className="mb-mr">{market.name}</h2>- {market.owner}
         </span>
         <div className={"items-center pt-2"}>
-          <span style={{ color: "var(--lightSquidInk", paddingBottom: "1em" }}>
+          <span style={{ color: "var(--lightSquidInk)", paddingBottom: "1em" }}>
             <Icon name={"date"} className={"icon"} />
             {market.createdAt}
           </span>
@@ -160,6 +160,7 @@ class MarketPage extends React.Component {
                 Products ({ market.products.items.length})
               </React.Fragment>
             }
+            name={"2"}
           >
             <div className="product-list">
               {market.products.items.map(product => (
@@ -169,7 +170,7 @@ class MarketPage extends React.Component {
           </Tabs.Pane>
         </Tabs>
       </React.Fragment>
-    )
+    );
   }
 }
 

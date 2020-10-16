@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as CalculatorIcon } from "../img/calculator.svg";
 
 // We destructured "user" and "handleSignOut" from props passed in via within Router component in App.js
-const Navbar = ({ user, handleSignOut }) => (
+const Navbar = ({ user, handleSignout }) => (
   <Nav mode={"horizontal"} theme={"dark"} defaultActive={"1"}>
     <div className="nav-container">
       {/* App Title / Icon */}
@@ -30,7 +30,7 @@ const Navbar = ({ user, handleSignOut }) => (
           </NavLink>
         </Nav.Item>
         <Nav.Item index={"4"}>
-          <Button type={"warning"} onClick={handleSignOut}>Sign Out</Button>
+          <Button type={"warning"} onClick={handleSignout}>Sign Out</Button>
         </Nav.Item>
       </div>
     </div>

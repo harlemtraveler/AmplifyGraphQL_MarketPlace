@@ -217,7 +217,7 @@ class Product extends React.Component {
                 </Dialog.Footer>
               </Dialog>
             </div>
-          )
+          );
         }}
       </UserContext.Consumer>
     );
